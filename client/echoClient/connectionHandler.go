@@ -6,7 +6,7 @@ import (
 )
 
 func connect() net.Conn {
-	conn, err := net.Dial("tcp", "192.168.1.140:8080")
+	conn, err := net.Dial("tcp", "86.50.231.112:8080")
 	if err != nil {
 		log.Fatalf("Couldn't connect to the server: %v", err)
 	}
