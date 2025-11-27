@@ -1,24 +1,30 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net"
 )
 
-// Struct to represent an message from a client.
 type ClientEvent struct {
 	Packet ControlPacket
 	Client net.Conn
 }
 
 func main() {
-	log.Println("Starting reactor server on :8080...")
+	mode := flag.String("mode", "primary", "Mode: 'primary' or 'backup'")
+	port := flag.String("port", "8080", "Port to listen on")
+	flag.Parse()
 
-	// Create a channel for messages to pass to the message handler.
-	eventChannel := make(chan ClientEvent)
+	log.Printf("Starting Broker in %s mode...", *mode)
 
-	// Start the message handler goroutine
-	go messageHandler(eventChannel)
+	eventChannel := make(chan ClientEvent, 100)
 
-	startConnectionHandler(eventChannel)
+	if *mode == "primary" {
+		go messageHandler(eventChannel)
+	} else {
+		go backupHandler(eventChannel)
+	}
+
+	startConnectionHandler(eventChannel, *port)
 }

@@ -34,7 +34,7 @@ func connect(topic string, address string) {
 	if err != nil {
 		log.Fatalf("Failed to send subscription: %v", err)
 	}
-	fmt.Printf("Subscribed to '%s'. Waiting for messages...\n", topic)
+	fmt.Printf("Subscribed to '%s' at '%s'. Waiting for messages...\n", topic, address)
 
 	scanner := bufio.NewScanner(conn)
 	for scanner.Scan() {
